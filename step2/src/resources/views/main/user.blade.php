@@ -22,12 +22,11 @@ Header
 <div>
 <h2>User information</h2>
 <ul>
-    <li>Icon :: <img src="{{ asset('storage/' . $user[0]->icon) }}"></li>
-    <li>Username :: {{ $user[0]->name }}</li>
-    <li>GitHub ID :: {{ $user[0]->github_id }}</li>
+    <li>Icon :: <img src="{{ $avatar }}"></li>
+    <li>GitHub ID :: {{ $user->github_id }}</li>
     <li>Liked :: </li>
 </ul>
-<a href="/edit?name={{ $user[0]->name }}&icon={{ $user[0]->icon }}">Edit</a>
+<!-- <a href="/edit?name={{ $user->name }}&icon={{ $user->icon }}">Edit</a> -->
 </div>
 <hr>
 

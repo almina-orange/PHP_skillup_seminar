@@ -20,14 +20,24 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $token = $request->session()->get('github_token', null);
-        $user = Socialite::driver('github')->userFromToken($token);
-        $user = Account::where("github_id", $user->user['login'])->find(1);
+        try {
+            $info = Socialite::driver('github')->userFromToken($token);
+        } catch (\Exception $e) {
+            return redirect('login/github');
+        }
+        
+        // $client = new \GuzzleHttp\Client();
+        // $res = $client->request('GET', 'https://github.com/almina-orange.png', [
+        //     'auth' => [$info->user['login'], $token]
+        // ]);
 
-        // $images = Image::all();
-        // $images = DB::select('select * from public.images left outer join public.accounts on public.images.user_id = public.accounts.id');
-        $images = Image::select('public.images.id', 'public.images.filepath', 'public.images.caption', 'public.images.user_id', 'public.accounts.name')
+        $user = Account::where("github_id", $info->user['login'])->find(1);
+
+        $images = Image::select('public.images.id', 'public.images.filepath', 'public.images.caption', 'public.images.user_id', 'public.accounts.github_id')
                         ->join('public.accounts', 'public.images.user_id', '=', 'public.accounts.id')
                         ->get();
+        
         return view('main/home', ['images' => $images, 'token' => $token, 'user' => $user]);
+        // return view('main/info', ['token' => $token, 'info' => var_dump($info), 'res' => $info->user{'avatar_url'}]);
     }
 }

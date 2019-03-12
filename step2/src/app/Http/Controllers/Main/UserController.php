@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Main;
 use App\Model\Account;
 use App\Model\Image;
 use App\Http\Controllers\Controller;
+use Socialite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,22 +17,17 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // $users = Account::all();
-        // return view('main/user', ['users' => $users]);
-        $user = Account::where("github_id", "almina-orange")->get();
-        return view('main/user', ['user' => $user]);
-    }
+        $token = $request->session()->get('github_token', null);
+        try {
+            $info = Socialite::driver('github')->userFromToken($token);
+        } catch (\Exception $e) {
+            return redirect('login/github');
+        }
 
-    public function viewUser(Request $request)
-    {
-        $user = Account::where("id", $request->uid)->get();
+        $user = Account::where("id", $request->uid)->find(1);
         $images = Image::where("user_id", $request->uid)->get();
-        return view('main/user', ['user' => $user, 'images' => $images]);
-
-        // $name = "almina-orange";
-        // $user = Account::where("github_id", $name)->get();
-        // return view('main/user', ['user' => $user]);
+        return view('main/user', ['user' => $user, 'images' => $images, 'avatar' => $info->user['avatar_url']]);
     }
 }

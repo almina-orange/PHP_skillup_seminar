@@ -33,7 +33,7 @@
 Route::get('/', 'Main\LoginController@index');
 Route::get('/home', 'Main\HomeController@index');
 // Route::get('/user', 'Main\UserController@index');
-Route::get('/user', 'Main\UserController@viewUser');
+Route::get('/user', 'Main\UserController@index');
 Route::get('/post', 'Main\PostController@index');
 Route::post('/post/delete', 'Main\PostController@delete');
 Route::get('/like/list', 'Main\LikeController@index');

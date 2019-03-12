@@ -15,9 +15,7 @@ class CreateAccountsTable extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->nullable();
             $table->string('github_id');
-            $table->string('icon');
             $table->timestamps();
         });
     }

@@ -24,8 +24,7 @@ Header
 <h2>Login user information</h2>
 <ul>
     <li>UserID :: {{ $user->id }}</li>
-    <li>Username :: {{ $user->name }}</li>
-    <li>GitHubID :: {{ $user->github_id }}</li>
+    <li>Username :: {{ $user->github_id }}</li>
 </ul>
 </div>
 <hr>
