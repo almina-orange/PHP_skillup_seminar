@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Account extends Model
 {
-    protected $fillable = ['name', 'comment', 'github_id'];
+    protected $fillable = ['github_id'];
 }

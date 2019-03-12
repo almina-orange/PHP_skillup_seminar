@@ -22,9 +22,10 @@ Header
 <div>
 <h2>User information</h2>
 <ul>
-    <li>Icon :: <img src="{{ $avatar }}"></li>
+    <li>Icon :: <img src="https://github.com/{{ $user->github_id }}.png"></li>
     <li>GitHub ID :: {{ $user->github_id }}</li>
-    <li>Liked :: </li>
+    <li>Liked :: {{ $likes }}</li>
+    <li>Posting :: {{ $posts }}</li>
 </ul>
 <!-- <a href="/edit?name={{ $user->name }}&icon={{ $user->icon }}">Edit</a> -->
 </div>
@@ -36,16 +37,10 @@ Header
 @isset ($images)
     @foreach ($images as $d)
         <div>
-            ID :: {{ $d->id }}<br>
+            ImageID :: {{ $d->id }}<br>
             <img src="{{ asset('storage/' . $d->filepath) }}">
             <br>
             Caption :: {{ $d->caption }}<br>
-            Liked users :: <br>
-            <ul>
-                <li>user1</li>
-                <li>user2</li>
-                <li>user3</li>
-            </ul>
 
             @if ($d->name == "user")
                 <form action="/post/delete" method="post">

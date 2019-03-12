@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Main;
 
-// use App\User;
 use App\Model\Account;
 use App\Model\Image;
+use App\Model\Like;
 use App\Http\Controllers\Controller;
 use Socialite;
 use Illuminate\Http\Request;
@@ -19,15 +19,23 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $token = $request->session()->get('github_token', null);
-        try {
-            $info = Socialite::driver('github')->userFromToken($token);
-        } catch (\Exception $e) {
-            return redirect('login/github');
+        // $user = Account::find($request->uid);
+        $user = Account::where("id", $request->uid)->first();
+        $images = Image::where("user_id", $request->uid)->get();
+
+        // $iids = Image::select("id")
+        //             ->where("user_id", $request->uid)
+        //             ->get();
+        // $iids = $iids->pluck("id");
+
+        // $images = Image::find($iids);
+
+        $likes = 0;
+        foreach ($images as $d) {
+            $likes += Like::where("image_id", $d->id)->count();
         }
 
-        $user = Account::where("id", $request->uid)->find(1);
-        $images = Image::where("user_id", $request->uid)->get();
-        return view('main/user', ['user' => $user, 'images' => $images, 'avatar' => $info->user['avatar_url']]);
+        return view('main/user', ['user' => $user, 'images' => $images, 'likes' => $likes, 'posts' => count($images)]);
+        // return view('main/info', ['info' => var_dump($info), 'token' => $token, 'res' => $info->user['avatar_url']]);
     }
 }

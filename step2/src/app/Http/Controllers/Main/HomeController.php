@@ -25,13 +25,8 @@ class HomeController extends Controller
         } catch (\Exception $e) {
             return redirect('login/github');
         }
-        
-        // $client = new \GuzzleHttp\Client();
-        // $res = $client->request('GET', 'https://github.com/almina-orange.png', [
-        //     'auth' => [$info->user['login'], $token]
-        // ]);
 
-        $user = Account::where("github_id", $info->user['login'])->find(1);
+        $user = Account::where("github_id", $info->user['login'])->first();
 
         $images = Image::select('public.images.id', 'public.images.filepath', 'public.images.caption', 'public.images.user_id', 'public.accounts.github_id')
                         ->join('public.accounts', 'public.images.user_id', '=', 'public.accounts.id')

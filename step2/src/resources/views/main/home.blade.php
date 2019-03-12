@@ -24,7 +24,7 @@ Header
 <h2>Login user information</h2>
 <ul>
     <li>UserID :: {{ $user->id }}</li>
-    <li>Username :: {{ $user->github_id }}</li>
+    <li>User :: {{ $user->github_id }}</li>
 </ul>
 </div>
 <hr>
@@ -35,7 +35,7 @@ Header
     @foreach ($images as $d)
         <div>
             ImageID :: {{ $d->id }}<br>
-            Posted by <a href="/user?uid={{ $d->user_id }}">{{ $d->name }}</a>.<br>
+            Posted by <a href="/user?uid={{ $d->user_id }}">{{ $d->github_id }}</a>.<br>
             <img src="{{ asset('storage/' . $d->filepath) }}">
             <br>
             Caption :: {{ $d->caption }}<br>
@@ -48,7 +48,7 @@ Header
                 <input type="submit" value="Like">
             </form>
 
-            @if ($d->name == "user")
+            @if ($d->github_id == $user->github_id)
                 <form action="/post/delete" method="post">
                     {{ csrf_field() }}
                     <input type="hidden" name="id" value="{{ $d->id }}">

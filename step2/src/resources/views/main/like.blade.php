@@ -25,7 +25,10 @@ Header
 @isset ($users)
 <ul>
     @foreach ($users as $d)
-        <li>{{ $d->name }}</li>
+        <a href="/user?uid={{ $d->user_id }}">
+        <li>{{ $d->github_id }}</li>
+        <img src="https://github.com/{{ $d->github_id }}.png">
+        </a>
     @endforeach
 </ul>
 @endisset
