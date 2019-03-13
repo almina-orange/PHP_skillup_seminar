@@ -13,7 +13,7 @@
 Header
 <ul>
     <li><a href="/home">Home</a></li>
-    <li><a href="/">Logout</a></li>
+    <li><a href="/logout">Logout</a></li>
     <li><a href="/post?uid={{ $user->id }}">Post</li>
     <li><a href="/user?uid={{ $user->id }}">MyPage</a></li>
 </ul>

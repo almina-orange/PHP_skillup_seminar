@@ -42,6 +42,7 @@ Route::post('/post/upload', 'Main\PostController@upload');
 
 Route::get('/login/github', 'Auth\LoginController@redirectToProvider');
 Route::get('/login/github/callback', 'Auth\LoginController@handleProviderCallback');
+Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::get('/edit', 'Main\AccountController@index');
 Route::post('/edit/update', 'Main\AccountController@updateUser');

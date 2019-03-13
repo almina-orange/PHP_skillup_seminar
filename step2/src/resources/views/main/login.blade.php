@@ -7,6 +7,16 @@
 </head>
 
 <body>
-<a href="/login/github">Login by GitHub account.</a>
+<div>
+<div>
+@isset ($info)
+    {{ $info }}
+@endisset
+</div><hr>
+<ul>
+    <li><a href="/login/github">Login by GitHub account.</a></li>
+    <li><a href="/logout">logout</a></li>
+    <li><a href="/">back</a></li>
+</ul>
 </body>
 </html>

@@ -32,7 +32,7 @@ class HomeController extends Controller
                         ->join('public.accounts', 'public.images.user_id', '=', 'public.accounts.id')
                         ->get();
         
-        return view('main/home', ['images' => $images, 'token' => $token, 'user' => $user]);
-        // return view('main/info', ['token' => $token, 'info' => var_dump($info), 'res' => $info->user{'avatar_url'}]);
+        // return view('main/home', ['images' => $images, 'token' => $token, 'user' => $user]);
+        return view('main/info', ['token' => $token, 'info' => var_dump($info), 'res' => $info->user{'avatar_url'}]);
     }
 }
