@@ -25,7 +25,7 @@ class HomeController extends Controller
         } else {
             $pg = 1;
         }
-        $images = Image::select('public.images.id', 'public.images.filepath', 'public.images.caption', 'public.images.user_id', 'public.users.github_id')
+        $images = Image::select('public.images.id', 'public.images.image', 'public.images.caption', 'public.images.user_id', 'public.users.github_id')
                         ->join('public.users', 'public.images.user_id', '=', 'public.users.id')
                         ->orderBy('public.images.id', 'desc')
                         ->offset(($pg - 1) * 10)->limit(10)
