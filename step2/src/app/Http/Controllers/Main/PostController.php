@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Main;
 
-// use App\User;
 use App\Model\Image;
-use App\Model\Account;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -17,8 +15,12 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $user = Account::where("id", $request->uid)->find(1);
-        return view('main/post', ['user' => $user]);
+        $user = $request->user();
+        if (!is_null($user)) {
+            return view('main/post', ['user' => $user]);
+        } else {
+            return redirect('home');
+        }
     }
 
     /**
@@ -28,31 +30,38 @@ class PostController extends Controller
      */
     public function upload(Request $request)
     {
+        // Validation check
         $this->validate($request, [
             'uid' => [
                 'required',
             ],
             'caption' => [
                 'required',
-                'min:5',
-                'max:140',
+                'max:200',
             ],
             'file' => [
                 'required',
                 'file',
                 'image',
                 'mimes:jpeg,png',
+                'max:60000'
             ]
         ]);
 
         if ($request->file('file')->isValid([])) {
             $now = date("Y/m/d H:i:s");
-            $uid = $request->input('uid');
-            $caption = $request->input('caption');
+            $uid = $request->uid;
+            $caption = $request->caption;
             $path = $request->file->store('public');  // store in storage
 
-            // Store in DB as filename
-            Image::insert(["filepath" => basename($path), "caption" => $caption, "user_id" => $uid, "created_at" => $now]);
+            // Add data in DB
+            Image::insert([
+                "filepath" => basename($path),
+                "caption" => $caption,
+                "user_id" => $uid,
+                "created_at" => $now,
+                "updated_at" => $now
+            ]);
             $images = Image::all();
             
             return redirect('home');

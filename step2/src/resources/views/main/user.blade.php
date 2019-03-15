@@ -1,3 +1,6 @@
+<!-- Check login status -->
+<?php $stat = Illuminate\Support\Facades\Auth::check(); ?>
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -11,23 +14,31 @@
 
 <header>
 Header
-<ul>
-    <li><a href="/home">Home</a></li>
-    <li><a href="/">Logout</a></li>
-    <li><a href="/post">Post</a></li>
-</ul>
+@if ($stat)
+    <ul>
+        <li><a href="/home">Home</a></li>
+        <li><a href="/logout">Logout</a></li>
+        <li><a href="/post?uid={{ $user->id }}">Post</a></li>
+    </ul>
+@else
+    <ul>
+        <li><a href="/home">Home</a></li>
+        <li><a href="/">Login</a></li>
+        <li><a href="/">Post</a></li>
+    </ul>
+@endif
 </header>
 <hr>
 
 <div>
 <h2>User information</h2>
 <ul>
-    <li>Icon :: <img src="{{ asset('storage/' . $user[0]->icon) }}"></li>
-    <li>Username :: {{ $user[0]->name }}</li>
-    <li>GitHub ID :: {{ $user[0]->github_id }}</li>
-    <li>Liked :: </li>
+    <li>Icon :: <img src="https://github.com/{{ $user->github_id }}.png"></li>
+    <li>GitHub ID :: {{ $user->github_id }}</li>
+    <li>Liked :: {{ $likes }}</li>
+    <li>Posting :: {{ $posts }}</li>
 </ul>
-<a href="/edit?name={{ $user[0]->name }}&icon={{ $user[0]->icon }}">Edit</a>
+<!-- <a href="/edit?name={{ $user->name }}&icon={{ $user->icon }}">Edit</a> -->
 </div>
 <hr>
 
@@ -37,16 +48,10 @@ Header
 @isset ($images)
     @foreach ($images as $d)
         <div>
-            ID :: {{ $d->id }}<br>
+            ImageID :: {{ $d->id }}<br>
             <img src="{{ asset('storage/' . $d->filepath) }}">
             <br>
             Caption :: {{ $d->caption }}<br>
-            Liked users :: <br>
-            <ul>
-                <li>user1</li>
-                <li>user2</li>
-                <li>user3</li>
-            </ul>
 
             @if ($d->name == "user")
                 <form action="/post/delete" method="post">
@@ -59,6 +64,16 @@ Header
         <hr>
     @endforeach
 @endisset
+
+<div>
+    @if ($pg > 1)
+        <a href="user?uid={{ $user->id }}&pg={{ $pg - 1 }}">Previous</a>
+    @endif
+    Page : {{ $pg }} / {{ $maxPg }}
+    @if ($pg < $maxPg)
+        <a href="user?uid={{ $user->id }}&pg={{ $pg + 1 }}">Next</a>
+    @endif
+</div>
 
 <hr>
 <footer>

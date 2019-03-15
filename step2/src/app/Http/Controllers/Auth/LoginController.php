@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Auth;
+use App\User;
+// use App\Model\Account;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Socialite;
@@ -57,20 +60,48 @@ class LoginController extends Controller
      */
     public function handleProviderCallback(Request $request)
     {
+        // Get user information from github
         $github_user = Socialite::driver('github')->user();
 
-        // $request->session()->put('github_token', $user->token);
-        // return redirect('github');
-
+        // Check existence
         $now = date("Y/m/d H:i:s");
-        $icon = "default.png";
-        $app_user = DB::select('select * from public.accounts where github_id = ?', [$github_user->user['login']]);
+        $app_user = User::select()
+                        ->where("github_id", $github_user->user['login'])
+                        ->first();
         if (empty($app_user)) {
-            // new user
-            DB::insert('insert into public.accounts (name, github_id, icon, created_at, updated_at) values (?, ?, ?, ?, ?)', [$github_user->user['login'], $github_user->user['login'], $icon, $now, $now]);
+            // Add new user
+            $app_user = User::insert([
+                "github_id" => $github_user->user['login'],
+                "created_at" => $now,
+                "updated_at" => $now
+            ]);
         }
         $request->session()->put('github_token', $github_user->token);
 
+        // Login using laravel
+        Auth::login($app_user, true);
+
+        // [Debug] Check login status
+        // $info = $request->session();
+        // $info = $request->user();
+        // // $info = Auth::user();
+        // // $info = Auth::check();
+
         return redirect('home');
+        // return view('main/login', ['info' => var_dump($info)]);
+    }
+
+    public function logout(Request $request)
+    {
+        // Logout using laravel
+        Auth::logout();
+
+        // $info = $request->session();
+        // $info = $request->user();
+        // // $info = Auth::user();
+        // // $info = Auth::check();
+
+        return redirect('/');
+        // return view('main/login', ['info' => var_dump($info)]);
     }
 }
