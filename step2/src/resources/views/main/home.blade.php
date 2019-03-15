@@ -49,7 +49,7 @@ Header
         <div>
             ImageID :: {{ $d->id }}<br>
             Posted by <a href="/user?uid={{ $d->user_id }}">{{ $d->github_id }}</a>.<br>
-            <img src="{{ asset('storage/' . $d->filepath) }}">
+            <img src="data:image/png;base64,<?= $d->image ?>">
             <br>
             Caption :: {{ $d->caption }}<br>
             <a href="/like/list?iid={{ $d->id }}">Liked users</a><br>

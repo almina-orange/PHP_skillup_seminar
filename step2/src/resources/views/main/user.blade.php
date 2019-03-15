@@ -49,7 +49,7 @@ Header
     @foreach ($images as $d)
         <div>
             ImageID :: {{ $d->id }}<br>
-            <img src="{{ asset('storage/' . $d->filepath) }}">
+            <img src="data:image/png;base64,<?= $d->image ?>">
             <br>
             Caption :: {{ $d->caption }}<br>
 
