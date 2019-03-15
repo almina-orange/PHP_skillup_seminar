@@ -60,22 +60,16 @@ class LoginController extends Controller
      */
     public function handleProviderCallback(Request $request)
     {
+        // Get user information from github
         $github_user = Socialite::driver('github')->user();
 
+        // Check existence
         $now = date("Y/m/d H:i:s");
-        // $app_user = Account::select()
-        //                     ->where("github_id", $github_user->user['login'])
-        //                     ->first();
         $app_user = User::select()
                         ->where("github_id", $github_user->user['login'])
                         ->first();
         if (empty($app_user)) {
-            // insert new user
-            // $app_user = Account::insert([
-            //     "github_id" => $github_user->user['login'],
-            //     "created_at" => $now,
-            //     "updated_at" => $now
-            // ]);
+            // Add new user
             $app_user = User::insert([
                 "github_id" => $github_user->user['login'],
                 "created_at" => $now,
@@ -84,24 +78,30 @@ class LoginController extends Controller
         }
         $request->session()->put('github_token', $github_user->token);
 
+        // Login using laravel
         Auth::login($app_user, true);
 
-        $info = $request->session();
-        $info = $request->user();
-        // $info = Auth::user();
-        // $info = Auth::check();
+        // [Debug] Check login status
+        // $info = $request->session();
+        // $info = $request->user();
+        // // $info = Auth::user();
+        // // $info = Auth::check();
 
-        // return redirect('home');
-        return view('main/login', ['info' => var_dump($info)]);
+        return redirect('home');
+        // return view('main/login', ['info' => var_dump($info)]);
     }
 
     public function logout(Request $request)
     {
+        // Logout using laravel
         Auth::logout();
-        $info = $request->session();
-        $info = $request->user();
-        // $info = Auth::user();
-        // $info = Auth::check();
-        return view('main/login', ['info' => var_dump($info)]);
+
+        // $info = $request->session();
+        // $info = $request->user();
+        // // $info = Auth::user();
+        // // $info = Auth::check();
+
+        return redirect('/');
+        // return view('main/login', ['info' => var_dump($info)]);
     }
 }

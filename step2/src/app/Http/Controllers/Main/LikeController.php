@@ -18,7 +18,7 @@ class LikeController extends Controller
     public function index(Request $request)
     {
         $users = Like::select()
-                        ->join('public.accounts', 'public.likes.user_id', '=', 'public.accounts.id')
+                        ->join('public.users', 'public.likes.user_id', '=', 'public.users.id')
                         ->where('image_id', $request->iid)
                         ->get();
         return view('main/like', ['users' => $users]);
@@ -27,9 +27,13 @@ class LikeController extends Controller
     public function like(Request $request)
     {
         $now = date("Y/m/d H:i:s");
+
+        // New 'like'
         $row = Like::where('image_id', $request->iid)
                     ->where('user_id', $request->uid)
                     ->get();
+
+        // Cancel 'like'
         if (count($row) == 0) {
             Like::insert([
                 "image_id" => $request->iid,
@@ -37,6 +41,10 @@ class LikeController extends Controller
                 "created_at" => $now,
                 "updated_at" => $now
             ]);
+        } else {
+            Like::where('image_id', $request->iid)
+                ->where('user_id', $request->uid)
+                ->delete();
         }
         
         return redirect('home');

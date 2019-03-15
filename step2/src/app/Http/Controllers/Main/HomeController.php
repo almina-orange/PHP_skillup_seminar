@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Main;
 
-// use App\User;
+use App\User;
 use App\Model\Image;
-use App\Model\Account;
+use App\Model\Like;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Socialite;
@@ -19,20 +19,25 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $token = $request->session()->get('github_token', null);
-        try {
-            $info = Socialite::driver('github')->userFromToken($token);
-        } catch (\Exception $e) {
-            return redirect('login/github');
+        $user = $request->user();
+        if (isset($request->pg)) {
+            $pg = $request->pg;
+        } else {
+            $pg = 1;
         }
-
-        $user = Account::where("github_id", $info->user['login'])->first();
-
-        $images = Image::select('public.images.id', 'public.images.filepath', 'public.images.caption', 'public.images.user_id', 'public.accounts.github_id')
-                        ->join('public.accounts', 'public.images.user_id', '=', 'public.accounts.id')
+        $images = Image::select('public.images.id', 'public.images.filepath', 'public.images.caption', 'public.images.user_id', 'public.users.github_id')
+                        ->join('public.users', 'public.images.user_id', '=', 'public.users.id')
+                        ->orderBy('public.images.id', 'desc')
+                        ->offset(($pg - 1) * 10)->limit(10)
                         ->get();
-        
-        // return view('main/home', ['images' => $images, 'token' => $token, 'user' => $user]);
-        return view('main/info', ['token' => $token, 'info' => var_dump($info), 'res' => $info->user{'avatar_url'}]);
+
+        $maxPg = ceil(Image::count() / 10);
+
+        return view('main/home', [
+            'user' => $user,
+            'images' => $images,
+            'pg' => $pg,
+            'maxPg' => $maxPg
+        ]);
     }
 }

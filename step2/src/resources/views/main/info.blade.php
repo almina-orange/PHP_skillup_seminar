@@ -8,8 +8,6 @@
 </head>
 
 <body>
-<div>{{ $info }}</div><hr>
-<a href="/logout">logout</a>
-<a href="/">back</a>
+<?php var_dump($res); ?><hr>
 </body>
 </html>

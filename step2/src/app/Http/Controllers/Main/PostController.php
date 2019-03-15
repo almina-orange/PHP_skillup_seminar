@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Main;
 
-// use App\User;
 use App\Model\Image;
-use App\Model\Account;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -17,8 +15,12 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $user = Account::where("id", $request->uid)->first();
-        return view('main/post', ['user' => $user]);
+        $user = $request->user();
+        if (!is_null($user)) {
+            return view('main/post', ['user' => $user]);
+        } else {
+            return redirect('home');
+        }
     }
 
     /**
@@ -52,7 +54,7 @@ class PostController extends Controller
             $caption = $request->caption;
             $path = $request->file->store('public');  // store in storage
 
-            // Store in DB as filename
+            // Add data in DB
             Image::insert([
                 "filepath" => basename($path),
                 "caption" => $caption,
