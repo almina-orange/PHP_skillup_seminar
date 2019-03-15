@@ -52,11 +52,11 @@ class PostController extends Controller
             $now = date("Y/m/d H:i:s");
             $uid = $request->uid;
             $caption = $request->caption;
-            $path = $request->file->store('public');  // store in storage
+            $image = base64_encode(file_get_contents($request->file->getRealPath()));  // store in storage
 
             // Add data in DB
             Image::insert([
-                "filepath" => basename($path),
+                "image" => $image,
                 "caption" => $caption,
                 "user_id" => $uid,
                 "created_at" => $now,
