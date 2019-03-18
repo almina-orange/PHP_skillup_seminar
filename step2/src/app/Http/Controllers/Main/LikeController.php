@@ -17,11 +17,12 @@ class LikeController extends Controller
      */
     public function index(Request $request)
     {
+        $user = $request->user();
         $users = Like::select()
                         ->join('public.users', 'public.likes.user_id', '=', 'public.users.id')
                         ->where('image_id', $request->iid)
                         ->get();
-        return view('main/like', ['users' => $users]);
+        return view('main/like', ['user' => $user, 'users' => $users]);
     }
     
     public function like(Request $request)

@@ -1,109 +1,127 @@
-<!-- Check login status -->
-<?php $stat = Illuminate\Support\Facades\Auth::check(); ?>
-
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-
-    <title>Home</title>
-</head>
-
-<body>
-<h1>Welcome to Hinstagram!</h1>
-
-<header>
-Header
-@if ($stat)
-    <ul>
-        <li><a href="/home">Home</a></li>
-        <li><a href="/logout">Logout</a></li>
-        <li><a href="/post?uid={{ $user->id }}">Post</a></li>
-    </ul>
-@else
-    <ul>
-        <li><a href="/home">Home</a></li>
-        <li><a href="/">Login</a></li>
-        <li><a href="/">Post</a></li>
-    </ul>
-@endif
-</header>
-<hr>
-
-<div>
-<h2>Login user information</h2>
-@if (is_null($user))
-@else
-    <ul>
-        <li>UserID :: {{ $user->id }}</li>
-        <li>User :: <a href="user?uid={{ $user->id }}">{{ $user->github_id }}</a></li>
-    </ul>
-@endif
-</div>
-<hr>
-
+@extends('../../layouts/my')
+@section('title', 'Home')
+@section('content')
 <!-- View uploaded image -->
-<h2>Timeline</h2>
-@isset ($images)
-    @foreach ($images as $d)
-        <div>
-            ImageID :: {{ $d->id }}<br>
-            Posted by <a href="/user?uid={{ $d->user_id }}">{{ $d->github_id }}</a>.<br>
-            <img src="data:image/png;base64,<?= $d->image ?>">
-            <br>
-            Caption :: {{ $d->caption }}<br>
-            <a href="/like/list?iid={{ $d->id }}">Liked users</a><br>
+<div class="container">
+    <h2>{{ $head }}</h2>
+    <div class="card-deck">
+        @isset ($images)
+            @foreach ($images as $d)
+                <div class="card" style="min-width: 21rem; max-width: 21rem;">
+                    <img src="data:image/png;base64,{{ $d->image }}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <p>{{ $d->caption }}</p>
+                            <footer class="blockquote-footer">Posted by <a href="/user?uid={{ $d->user_id }}">{{ $d->github_id }}</a></footer>
+                        </blockquote>
+                    </div>
+                    <div class="card-body">
+                        <a href="/like/list?iid={{ $d->id }}" class="card-link btn btn-outline-primary">
+                        {{ App\Model\Like::where('image_id', $d->id)->count() }} users liked
+                        </a>
 
-            @if (is_null($user))
-            @else
-                <?php
-                    $row = App\Model\Like::where('image_id', $d->id)
-                                        ->where('user_id', $user->id)
-                                        ->get();
-                    if (count($row) != 0) { 
-                ?>
-                        <div>You already liked this post!</div><br>
-                <?php
-                    }
-                ?>
+                        @guest
+                            <button class="card-link btn btn-primary" disabled> Like </button>
+                        @else
+                            <form class="d-inline" action="/like" method="post">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="iid" value="{{ $d->id }}">
+                                <input type="hidden" name="uid" value="{{ $user->id }}">
 
-                <form action="/like" method="post">
-                    {{ csrf_field() }}
-                    <input type="hidden" name="iid" value="{{ $d->id }}">
-                    <input type="hidden" name="uid" value="{{ $user->id }}">
-                    <input type="submit" value="Like">
-                </form>
-            @endif
+                                <?php
+                                    $row = App\Model\Like::where('image_id', $d->id)
+                                                        ->where('user_id', $user->id)
+                                                        ->get();
+                                    if (count($row) != 0) { 
+                                ?>
+                                        <button class="card-link btn btn-secondary"> Dismiss </button>
+                                <?php
+                                    } else {
+                                ?>
+                                        <button class="card-link btn btn-primary"> Like </button>
+                                <?php
+                                    }
+                                ?>
+                            </form>
+                        @endguest
+                    </div>
+                </div>
+                <!-- <div>
+                    Posted by <a href="/user?uid={{ $d->user_id }}">{{ $d->github_id }}</a>.<br>
+                    <img src="data:image/png;base64,{{ $d->image }}" height="250">
+                    <br>
+                    Caption :: {{ $d->caption }}<br>
+                    <a href="/like/list?iid={{ $d->id }}">Liked users</a><br>
 
-            @if (is_null($user))
-            @else
-                @if ($d->github_id == $user->github_id)
-                    <form action="/post/delete" method="post">
-                        {{ csrf_field() }}
-                        <input type="hidden" name="id" value="{{ $d->id }}">
-                        <input type="submit" value="Delete">
-                    </form>
-                @endif
-            @endif
-        </div>
-        <hr>
-    @endforeach
-@endisset
+                    @guest
+                        <button class="btn btn-success" disabled> Like </button>
+                    @else
+                        <?php
+                            $row = App\Model\Like::where('image_id', $d->id)
+                                                ->where('user_id', $user->id)
+                                                ->get();
+                            if (count($row) != 0) { 
+                        ?>
+                                You already liked this post!<br>
+                        <?php
+                            }
+                        ?>
 
-<div>
-    @if ($pg > 1)
-        <a href="home?pg={{ $pg - 1 }}">Previous</a>
-    @endif
-    Page : {{ $pg }} / {{ $maxPg }}
-    @if ($pg < $maxPg)
-        <a href="home?pg={{ $pg + 1 }}">Next</a>
-    @endif
+                        <form action="/like" method="post">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="iid" value="{{ $d->id }}">
+                            <input type="hidden" name="uid" value="{{ $user->id }}">
+                            <button class="btn btn-success"> Like </button>
+                        </form>
+                    @endguest
+                </div>
+                <hr> -->
+            @endforeach
+        @endisset
+    </div>
 </div>
-<hr>
 
-<footer>
-Copyright by hogehoge.
-</footer>
+<div class="container">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            @if ($pg > 1)
+                <li class="page-item disabled">
+                    <a class="page-link" href="home?pg={{ $pg - 1 }}" tabindex="-1" aria-disabled="true">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="home?pg={{ $pg - 1 }}">{{ $pg - 1 }}</a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            @endif
 
-</body>
-</html>
+            <li class="page-item">
+                <a class="page-link" href="#">{{ $pg }} <span class="sr-only">(current)</span></a>
+            </li>
+
+            @if ($pg < $maxPg)
+                <li class="page-item">
+                    <a class="page-link" href="home?pg={{ $pg + 1 }}">{{ $pg + 1 }}</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="home?pg={{ $pg - 1 }}">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            @endif
+        </ul>
+    </nav>
+</div>
+@endsection

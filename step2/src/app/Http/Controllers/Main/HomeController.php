@@ -34,6 +34,39 @@ class HomeController extends Controller
         $maxPg = ceil(Image::count() / 10);
 
         return view('main/home', [
+            'head' => 'Latest',
+            'user' => $user,
+            'images' => $images,
+            'pg' => $pg,
+            'maxPg' => $maxPg
+        ]);
+    }
+
+    /**
+     * Show the application dashboard.
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function ranking(Request $request)
+    {
+        $user = $request->user();
+        if (isset($request->pg)) {
+            $pg = $request->pg;
+        } else {
+            $pg = 1;
+        }
+
+        $images = Image::select('public.images.id', 'image', 'caption', 'public.images.user_id', DB::raw('count(public.images.id)'))
+                        ->join('public.likes', 'public.images.id', '=', 'image_id')
+                        ->groupBy('public.images.id')
+                        ->orderBy('count', 'desc')
+                        ->offset(($pg - 1) * 10)->limit(10)
+                        ->get();
+
+        $maxPg = ceil(Image::count() / 10);
+
+        return view('main/home', [
+            'head' => 'Ranking',
             'user' => $user,
             'images' => $images,
             'pg' => $pg,
