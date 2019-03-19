@@ -108,7 +108,7 @@
                     <a class="page-link" href="home?pg={{ $pg + 1 }}">{{ $pg + 1 }}</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="home?pg={{ $pg - 1 }}">
+                    <a class="page-link" href="home?pg={{ $pg + 1 }}">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
