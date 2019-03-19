@@ -50,28 +50,46 @@
     </div>
 </div>
 
-<!-- <div>
-    @if ($pg > 1)
-        <a href="home?pg={{ $pg - 1 }}">Previous</a>
-    @endif
-    Page : {{ $pg }} / {{ $maxPg }}
-    @if ($pg < $maxPg)
-        <a href="home?pg={{ $pg + 1 }}">Next</a>
-    @endif
-</div>
-<hr> -->
 <div class="container">
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            @if ($pg > 1)
+                <li class="page-item disabled">
+                    <a class="page-link" href="home?pg={{ $pg - 1 }}" tabindex="-1" aria-disabled="true">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="home?pg={{ $pg - 1 }}">{{ $pg - 1 }}</a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            @endif
+
             <li class="page-item">
-            <a class="page-link" href="#">Next</a>
+                <a class="page-link" href="#">{{ $pg }} <span class="sr-only">(current)</span></a>
             </li>
+
+            @if ($pg < $maxPg)
+                <li class="page-item">
+                    <a class="page-link" href="home?pg={{ $pg + 1 }}">{{ $pg + 1 }}</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="home?pg={{ $pg + 1 }}">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            @endif
         </ul>
     </nav>
 </div>
