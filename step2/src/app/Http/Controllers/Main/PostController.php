@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Main;
 
 use App\Model\Image;
+use App\Model\Like;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -44,7 +45,7 @@ class PostController extends Controller
                 'file',
                 'image',
                 'mimes:jpeg,png',
-                'max:60000'
+                'max:60000',
             ]
         ]);
 
@@ -82,6 +83,7 @@ class PostController extends Controller
     {
         // Delete image from DB
         Image::where('id', $request->id)->delete();
+        Like::where('image_id', $request->id)->delete();
         
         return redirect('home');
     }
