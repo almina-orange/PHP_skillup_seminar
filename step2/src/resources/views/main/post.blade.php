@@ -22,7 +22,6 @@ $(function(){
 </script>
 
 @section('content')
-
 <!-- Error message -->
 @if ($errors->any())
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
