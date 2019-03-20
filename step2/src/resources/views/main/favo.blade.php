@@ -3,7 +3,7 @@
 @section('content')
 <!-- View uploaded image -->
 <div class="container">
-    <h2>Favorites</h2>
+    <h2>{{ $head }}</h2>
     <div class="card-deck">
         @isset ($images)
             @foreach ($images as $d)
@@ -12,17 +12,20 @@
                     <div class="card-body">
                         <blockquote class="blockquote mb-0">
                             <p>{{ $d->caption }}</p>
-                            <footer class="blockquote-footer">Posted by <a href="/user?uid={{ $d->user_id }}">{{ $d->github_id }}</a></footer>
+                            <footer class="blockquote-footer">
+                            Posted by <a href="/user?uid={{ $d->user_id }}">{{ App\User::where('id', $d->user_id)->first()->github_id }} </a>
+                            </footer>
                         </blockquote>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><a href="#" class="card-link">liked users</a></li>
-                    </ul>
                     <div class="card-body">
+                        <a href="/like/list?iid={{ $d->id }}" class="card-link btn btn-outline-primary">
+                        {{ App\Model\Like::where('image_id', $d->id)->count() }} users liked
+                        </a>
+
                         @guest
                             <button class="card-link btn btn-primary" disabled> Like </button>
                         @else
-                            <form action="/like" method="post">
+                            <form class="d-inline" action="/like" method="post">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="iid" value="{{ $d->id }}">
                                 <input type="hidden" name="uid" value="{{ $user->id }}">
