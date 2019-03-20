@@ -48,6 +48,7 @@ class FavoController extends Controller
         }
 
         return view('main/favo', [
+            'head' => 'Favorites',
             'user' => $user,
             'images' => $images,
             'pg' => $pg,
