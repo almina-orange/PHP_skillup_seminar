@@ -17,11 +17,7 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        if (!is_null($user)) {
-            return view('main/post', ['user' => $user]);
-        } else {
-            return redirect('home');
-        }
+        return view('main/post', ['user' => $user]);
     }
 
     /**
