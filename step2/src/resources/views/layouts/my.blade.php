@@ -49,7 +49,11 @@
                 <ul class="navbar-nav ml-auto">
                     {{-- 投稿ボタン --}}
                     <li class="nav-item">
-                        <a class="btn btn-success" href="{{ url('/post') }}" id="new-post">New Post</a>
+                        @guest
+                            <a class="btn btn-success" href="{{ url('/') }}" id="new-post">New Post</a>
+                        @else
+                            <a class="btn btn-success" href="{{ url('/post') }}" id="new-post">New Post</a>
+                        @endguest
                     </li>
 
                     {{-- 認証関連のリンク --}}
@@ -60,7 +64,7 @@
                                 Guest <span class="caret"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
-                                <a class="dropdown-item" href="#">Profile</a>
+                                <a class="dropdown-item" href="{{ url('/') }}">Profile</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{ url('/') }}"> Login </a>
                             </div>
