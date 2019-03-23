@@ -45,6 +45,31 @@
                         </a>
 
                         @guest
+                            <button class="card-link btn btn-primary" disabled> Like </button>
+                        @else
+                            <form class="d-inline" action="/like" method="post">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="iid" value="{{ $d->id }}">
+                                <input type="hidden" name="uid" value="{{ $user->id }}">
+
+                                <?php
+                                    $row = App\Model\Like::where('image_id', $d->id)
+                                                        ->where('user_id', $user->id)
+                                                        ->get();
+                                    if (count($row) != 0) { 
+                                ?>
+                                        <button class="card-link btn btn-secondary"> Dismiss </button>
+                                <?php
+                                    } else {
+                                ?>
+                                        <button class="card-link btn btn-primary"> Like </button>
+                                <?php
+                                    }
+                                ?>
+                            </form>
+                        @endguest
+
+                        @guest
                             <button class="card-link btn btn-danger" disabled> Delete </button>
                         @else
                             @if (auth()->user()->id != $user->id)
