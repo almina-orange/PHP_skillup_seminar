@@ -40,10 +40,10 @@
                     </li>
                 </ul>
 
-                <!-- <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <form class="form-inline my-2 my-lg-0" action="/search" method="get">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="target">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submin">Search</button>
-                </form> -->
+                </form>
 
                 {{-- Navbarの右側 --}}
                 <ul class="navbar-nav ml-auto">

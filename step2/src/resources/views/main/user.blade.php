@@ -88,12 +88,12 @@
         <ul class="pagination justify-content-center">
             @if ($pg > 1)
                 <li class="page-item disabled">
-                    <a class="page-link" href="home?pg={{ $pg - 1 }}" tabindex="-1" aria-disabled="true">
+                    <a class="page-link" href="user?uid={{ $user->id }}&pg={{ $pg - 1 }}" tabindex="-1" aria-disabled="true">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="home?pg={{ $pg - 1 }}">{{ $pg - 1 }}</a>
+                    <a class="page-link" href="user?uid={{ $user->id }}&pg={{ $pg - 1 }}">{{ $pg - 1 }}</a>
                 </li>
             @else
                 <li class="page-item disabled">
@@ -109,10 +109,10 @@
 
             @if ($pg < $maxPg)
                 <li class="page-item">
-                    <a class="page-link" href="home?pg={{ $pg + 1 }}">{{ $pg + 1 }}</a>
+                    <a class="page-link" href="user?uid={{ $user->id }}&pg={{ $pg + 1 }}">{{ $pg + 1 }}</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="home?pg={{ $pg + 1 }}">
+                    <a class="page-link" href="user?uid={{ $user->id }}&pg={{ $pg + 1 }}">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
