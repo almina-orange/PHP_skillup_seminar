@@ -28,11 +28,11 @@
                             <form class="d-inline" action="/like" method="post">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="iid" value="{{ $d->id }}">
-                                <input type="hidden" name="uid" value="{{ $user->id }}">
+                                <input type="hidden" name="uid" value="{{ auth()->user()->id }}">
 
                                 <?php
                                     $row = App\Model\Like::where('image_id', $d->id)
-                                                        ->where('user_id', $user->id)
+                                                        ->where('user_id', auth()->user()->id)
                                                         ->get();
                                     if (count($row) != 0) { 
                                 ?>
