@@ -16,8 +16,7 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $user = $request->user();
-        return view('main/post', ['user' => $user]);
+        return view('main/post');
     }
 
     /**

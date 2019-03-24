@@ -15,12 +15,14 @@ class SearchController extends Controller
      */
     public function search(Request $request)
     {   
+        // pagination
         if (isset($request->pg)) {
             $pg = $request->pg;
         } else {
             $pg = 1;
         }
 
+        // search images
         $tar = $request->target;
         if (isset($request->target)) {
             $images = Image::where('caption', 'ilike', '%'.$tar.'%')

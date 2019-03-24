@@ -42,8 +42,8 @@ $(function(){
     <!-- Form -->
     <form action="{{ url('post/upload') }}" method="post" enctype="multipart/form-data">
         <div class="form-group">
-            <p>User : {{ $user->github_id }}</p>
-            <input type="hidden" name="uid" value="{{ $user->id }}">
+            <p>User : {{ auth()->user()->github_id }}</p>
+            <input type="hidden" name="uid" value="{{ auth()->user()->id }}">
         </div>
 
         <div class="form-group">

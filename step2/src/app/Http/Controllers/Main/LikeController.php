@@ -7,7 +7,6 @@ use App\Model\Like;
 use App\Model\Image;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class LikeController extends Controller
 {
@@ -18,14 +17,14 @@ class LikeController extends Controller
      */
     public function index(Request $request)
     {
-        $user = $request->user();
+        // get image, liked users
         $image = Image::where('id', $request->iid)->first();
         $users = Like::select()
                         ->join('public.users', 'public.likes.user_id', '=', 'public.users.id')
                         ->where('image_id', $request->iid)
                         ->get();
+        
         return view('main/like', [
-            'user' => $user,
             'users' => $users,
             'image' => $image
         ]);
