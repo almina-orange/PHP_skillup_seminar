@@ -29,9 +29,9 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                {{-- Navbarの左側 --}}
+                {{-- Navbar on left --}}
                 <ul class="navbar-nav mr-auto">
-                    {{-- 「記事」と「ユーザー」へのリンク --}}
+                    {{-- Latest, Ranking --}}
                     <li class="nav-item active">
                         <a class="nav-link" href="/home"> Latest <span class="sr-only">(current)</span></a>
                     </li>
@@ -40,14 +40,15 @@
                     </li>
                 </ul>
 
+                {{-- Navbar on center / Search --}}
                 <form class="form-inline my-2 my-lg-0" action="/search" method="get">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="target">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submin">Search</button>
                 </form>
 
-                {{-- Navbarの右側 --}}
+                {{-- Navbar on right --}}
                 <ul class="navbar-nav ml-auto">
-                    {{-- 投稿ボタン --}}
+                    {{-- Post --}}
                     <li class="nav-item">
                         @guest
                             <a class="btn btn-success" href="{{ url('/') }}" id="new-post">New Post</a>
@@ -56,9 +57,9 @@
                         @endguest
                     </li>
 
-                    {{-- 認証関連のリンク --}}
+                    {{-- Profile, Favorites, Login/Logout --}}
                     @guest
-                        {{-- 「プロフィール」と「ログアウト」のドロップダウンメニュー --}}
+                        {{-- Dropdown menu --}}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Guest <span class="caret"></span>
@@ -70,7 +71,7 @@
                             </div>
                         </li>
                     @else
-                        {{-- 「プロフィール」と「ログアウト」のドロップダウンメニュー --}}
+                        {{-- Dropdown menu --}}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ auth()->user()->github_id }} <span class="caret"></span>
@@ -88,6 +89,7 @@
         </div>
     </nav>
 
+    {{-- Main contents --}}
     <main class="py-4">
         @yield('content')
     </main>
