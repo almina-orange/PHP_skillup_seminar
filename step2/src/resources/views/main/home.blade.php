@@ -57,7 +57,7 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             @if ($pg > 1)
-                <li class="page-item disabled">
+                <li class="page-item">
                     <a class="page-link" href="home?pg={{ $pg - 1 }}">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
